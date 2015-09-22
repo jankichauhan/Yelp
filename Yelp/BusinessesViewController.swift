@@ -15,18 +15,24 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        
 
         Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
-          
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            //update table view when new data
+           //update table view when new data
             self.tableView.reloadData()
             
             for business in businesses {
+                if business.reviewCount != nil {
+                 println(business.reviewCount)
+                }
                 println(business.name!)
                 println(business.address!)
+                //println(business.reviewCount!)
             }
         })
         
