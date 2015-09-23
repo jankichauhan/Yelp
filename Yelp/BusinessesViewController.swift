@@ -7,13 +7,22 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, FilterViewControllerDelegate {
+class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, FilterViewControllerDelegate, UISearchBarDelegate {
 
     var businesses: [Business]!
+    var searchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -45,6 +54,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
 //        }
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -63,6 +73,21 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         } else {
             return 0
         }
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
+        Business.searchWithTerm(searchBar.text, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            self.businesses = businesses
+            self.tableView.reloadData()
+        })
+        self.searchBar.endEditing(true)
+
+    }
+        
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        println("search change")
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
