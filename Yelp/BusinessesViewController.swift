@@ -16,6 +16,11 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 196.0/255.0, green: 18.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+      //  self.navigationController?.navigationBar.tintColor = UIColor.orangeColor()
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor()]
+
 
         searchBar = UISearchBar()
         searchBar.sizeToFit()
