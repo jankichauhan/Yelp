@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="PMi-vd-NZ6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="PMi-vd-NZ6">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Yelp-->
@@ -117,7 +118,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Yelp" id="Bht-wC-zBJ"/>
+                    <navigationItem key="navigationItem" title="Yelp" id="Bht-wC-zBJ">
+                        <barButtonItem key="leftBarButtonItem" title="Filters" id="Jq3-Sm-PFx">
+                            <connections>
+                                <segue destination="cMk-kp-Fgs" kind="modal" id="ciC-Zn-aRv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="tableView" destination="sRD-Hl-HfZ" id="LS9-fr-ARC"/>
@@ -125,7 +132,82 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgb-4b-F1b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1484" y="27"/>
+            <point key="canvasLocation" x="1323" y="27"/>
+        </scene>
+        <!--Filters-->
+        <scene sceneID="AXV-un-IWT">
+            <objects>
+                <viewController id="YRd-3x-dIN" customClass="FilterViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="e2M-iM-bEV"/>
+                        <viewControllerLayoutGuide type="bottom" id="R1W-cw-sTF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5In-VM-ukl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="62" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Zuz-oR-9aW">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="62" id="cJW-6z-62c" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cJW-6z-62c" id="8w4-Qo-V9N">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-in-E8d">
+                                                    <rect key="frame" x="34" y="20" width="119" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7fs-ue-Rtp">
+                                                    <rect key="frame" x="249" y="15" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="hWt-in-E8d" firstAttribute="leading" secondItem="8w4-Qo-V9N" secondAttribute="leadingMargin" constant="26" id="1De-Kp-mL2"/>
+                                                <constraint firstAttribute="centerY" secondItem="7fs-ue-Rtp" secondAttribute="centerY" id="eSI-LA-qg9"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="7fs-ue-Rtp" secondAttribute="trailing" constant="14" id="fUY-O9-ytC"/>
+                                                <constraint firstAttribute="centerY" secondItem="hWt-in-E8d" secondAttribute="centerY" id="s08-y3-zdp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="categoryLabel" destination="hWt-in-E8d" id="tFg-d5-6zc"/>
+                                            <outlet property="onSwitch" destination="7fs-ue-Rtp" id="Qtv-5z-uWW"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Zuz-oR-9aW" secondAttribute="trailing" constant="-16" id="1FI-bC-rmI"/>
+                            <constraint firstItem="Zuz-oR-9aW" firstAttribute="top" secondItem="5In-VM-ukl" secondAttribute="topMargin" id="Q4z-Lx-VRc"/>
+                            <constraint firstItem="R1W-cw-sTF" firstAttribute="top" secondItem="Zuz-oR-9aW" secondAttribute="bottom" id="TQd-0g-oFQ"/>
+                            <constraint firstItem="Zuz-oR-9aW" firstAttribute="leading" secondItem="5In-VM-ukl" secondAttribute="leadingMargin" constant="-16" id="YN8-sS-lLR"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Filters" id="oGK-KL-Kx2">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="YU0-zn-Puo">
+                            <connections>
+                                <action selector="onCancelButton:" destination="YRd-3x-dIN" id="cMk-1g-bZJ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Search" id="Bxv-ZP-55D">
+                            <connections>
+                                <action selector="onSearchButton:" destination="YRd-3x-dIN" id="eBz-ut-w8W"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tabelView" destination="Zuz-oR-9aW" id="Att-aB-jxl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kFY-F2-0M1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2103" y="10"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="H0s-rH-Ch5">
@@ -144,6 +226,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qcU-2D-npZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="952" y="26.999999999999996"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Te2-yK-vCU">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cMk-kp-Fgs" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gwj-hg-6Tb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="YRd-3x-dIN" kind="relationship" relationship="rootViewController" id="vq1-Ha-Icx"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="38r-XV-J26" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1711" y="15"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

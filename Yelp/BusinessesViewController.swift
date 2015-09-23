@@ -2,13 +2,12 @@
 //  BusinessesViewController.swift
 //  Yelp
 //
-//  Created by Timothy Lee on 4/23/15.
-//  Copyright (c) 2015 Timothy Lee. All rights reserved.
-//
+// Created by Janki Chauhan on 9/22/15.
+
 
 import UIKit
 
-class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, FilterViewControllerDelegate {
 
     var businesses: [Business]!
     
@@ -66,14 +65,23 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         }
     }
     
-    /*
-    // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let navigationController = segue.destinationViewController as! UINavigationController
+        let filtersViewController = navigationController.topViewController as! FilterViewController
+        
+        filtersViewController.delegate = self
     }
-    */
+
+    func filterViewController(filterviewcontroller: FilterViewController, didUpdateValue filter: [String : AnyObject]) {
+        
+        var categories = filter["categories"] as? [String]
+        
+        Business.searchWithTerm("Resturants", sort: nil, categories: categories, deals: nil) { (businesses:[Business]!, error: NSError!) -> Void in
+            
+            self.businesses = businesses
+            self.tableView.reloadData()
+        }
+    }
 
 }

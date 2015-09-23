@@ -2,8 +2,7 @@
 //  BusinessCell.swift
 //  Yelp
 //
-//  Created by Jaimin Shah on 9/22/15.
-//  Copyright (c) 2015 Timothy Lee. All rights reserved.
+//  Created by Janki Chauhan on 9/22/15.
 //
 
 import UIKit
