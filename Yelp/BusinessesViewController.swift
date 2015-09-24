@@ -106,9 +106,25 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     func filterViewController(filterviewcontroller: FilterViewController, didUpdateValue filter: [String : AnyObject]) {
         
         var categories = filter["categories"] as? [String]
+        var radius = filter["radius"] as? String
+        var deals = filter["deals"] as? Bool
+        let sort = filter["sort"] as! String
+        var sortBy:YelpSortMode!
         
-        Business.searchWithTerm("Resturants", sort: nil, categories: categories, deals: nil) { (businesses:[Business]!, error: NSError!) -> Void in
-            
+        switch sort{
+            case "0":
+                sortBy = YelpSortMode.BestMatched
+            case "1":
+                sortBy = YelpSortMode.Distance
+            case "2":
+                sortBy = YelpSortMode.HighestRated
+        default:
+            sortBy = YelpSortMode.BestMatched
+        }
+        var searchTerm = searchBar.text ?? "Resturants"
+        println(" search filters \(categories), distance  \(radius), deals \(deals), sort by \(sort)" )
+        
+       Business.searchWithTerm(searchTerm, sort: sortBy, categories: categories, deals: deals) { (businesses:[Business]!, error:NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }
