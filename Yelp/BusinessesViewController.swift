@@ -11,17 +11,19 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
 
     var businesses: [Business]!
     var searchBar: UISearchBar!
+    var searchLimit:Int!
     
     @IBOutlet weak var tableView: UITableView!
+    var isLoading = false
     
+    var loadingIndicator: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
     
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 196.0/255.0, green: 18.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-      //  self.navigationController?.navigationBar.tintColor = UIColor.orangeColor()
         self.navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName: UIColor.whiteColor()]
 
-
+        searchLimit = 7
         searchBar = UISearchBar()
         searchBar.sizeToFit()
         searchBar.delegate = self
@@ -33,8 +35,15 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
+        var tableFooterView = UIView(frame: CGRectMake(0, 0, 320, 50))
+        loadingIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        loadingIndicator.startAnimating()
+        loadingIndicator.center = tableFooterView.center
+        tableFooterView.addSubview(loadingIndicator)
+        
+        self.tableView.tableFooterView = tableFooterView;
 
-        Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Thai", limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
            //update table view when new data
             self.tableView.reloadData()
@@ -45,18 +54,9 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
                 }
                 println(business.name!)
                 println(business.address!)
-                //println(business.reviewCount!)
             }
         })
-        
-//        Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-//            self.businesses = businesses
-//            
-//            for business in businesses {
-//                print(business.name!)
-//                print(business.address!)
-//            }
-//        }
+
     }
 
     
@@ -69,6 +69,11 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         cell.business = businesses[indexPath.row]
+        if indexPath.row == (searchLimit-1) && searchLimit < 20 {
+            
+            println("reloading more data")
+            reloadData()
+        }
         return cell
     }
     
@@ -82,7 +87,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         
-        Business.searchWithTerm(searchBar.text, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(searchBar.text,limit:20, completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         })
@@ -95,6 +100,21 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         println("search change")
     }
     
+    func reloadData(){
+        
+        if (!self.isLoading) {
+            self.isLoading = true
+            searchLimit = searchLimit + 2
+        
+            //sleep(10)
+            Business.searchWithTerm("Thai",limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+                self.businesses = businesses
+                self.tableView.reloadData()
+            })
+            
+            self.isLoading = false
+        }
+    }
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let navigationController = segue.destinationViewController as! UINavigationController
@@ -124,7 +144,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         var searchTerm = searchBar.text ?? "Resturants"
         println(" search filters \(categories), distance  \(radius), deals \(deals), sort by \(sort)" )
         
-       Business.searchWithTerm(searchTerm, sort: sortBy, categories: categories, deals: deals) { (businesses:[Business]!, error:NSError!) -> Void in
+       Business.searchWithTerm(searchTerm, limit:20, sort: sortBy, categories: categories, deals: deals) { (businesses:[Business]!, error:NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
         }

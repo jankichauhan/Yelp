@@ -22,9 +22,9 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     var distances: [String]!
     var sortBy: [String]!
     var switchStates = [Int:Bool]()
-    var radius: String!
-    var sort: String!
-    var deals: Bool!
+    var radius: String! = "0"
+    var sort: String! = "0"
+    var deals: Bool! = false
     weak var delegate:FilterViewControllerDelegate?
     
     let CellIdentifier = "TableViewCell", HeaderViewIdentifier = "TableViewHeaderView"
