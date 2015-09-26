@@ -14,7 +14,7 @@ import UIKit
 
 class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,SwitchCellDelegate {
 
-    
+        
     @IBOutlet weak var tableView: UITableView!
     var data:[(String,[AnyObject])]!
     var arrayForBool : NSMutableArray = NSMutableArray()
@@ -25,6 +25,8 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     var radius: String! = "0"
     var sort: String! = "0"
     var deals: Bool! = false
+    var isCategoryCollapsed = true
+
     weak var delegate:FilterViewControllerDelegate?
     
     let CellIdentifier = "TableViewCell", HeaderViewIdentifier = "TableViewHeaderView"
@@ -37,7 +39,6 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         categories = yelpCategories()
         distances = yelpDistance()
         sortBy = yelpSortBy()
-        arrayForBool = ["0","0"]
 
         data = [("Deal", ["Offers a deal"]),
             ("Distance", ["Default"]),
@@ -47,6 +48,8 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         tableView.dataSource = self
         tableView.delegate = self
         tableView.registerClass(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
+        self.tableView.tableFooterView = UIView()
+
 
     }
 
@@ -88,60 +91,128 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return data.count
+        return 5
     }
-
-//    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier, forIndexPath: indexPath) as UITableViewCell
-//        let citiesInSection = data[indexPath.section].1
-//        cell.textLabel?.text = citiesInSection[indexPath.row]
-//        return cell
-//    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        switch section {
+        case 0:
+            return 1
+        case 1:
+            return 1
+        case 2:
+            return 1
+        case 3:
+            return categories.count + 1
+        case 4:
+            return 1
+        default:
+            break
+        }
+        
+        return 0
+    }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-        
-        let sectionSelected = data[indexPath.section].1
-        switch data[indexPath.section].0 {
+       // let sectionSelected = data[indexPath.section].1
+        println(indexPath.row)
+        switch indexPath.section {
+        case 0:
+            // Deal area
+            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+          
+            cell.categoryLabel.text = "Offering a deal"
+            cell.onSwitch.hidden = false
+            cell.sortControl.hidden = true
+            cell.radiusSlider.hidden = true
+            cell.sliderLabel.hidden = true
+            cell.delegate = self
             
-         case "Category":
-            cell.categoryLabel.text = sectionSelected[indexPath.row]["name"] as? String
-            cell.onSwitch.hidden = false
-            cell.sortControl.hidden = true
-            cell.radiusSlider.hidden = true
-            cell.sliderLabel.hidden = true
-         case "Deal":
-            cell.categoryLabel.text = sectionSelected[indexPath.row] as? String
-            cell.onSwitch.hidden = false
-            cell.sortControl.hidden = true
-            cell.radiusSlider.hidden = true
-            cell.sliderLabel.hidden = true
-        case "Distance":
+            return cell
+            
+        case 1:
+            // Radius area
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+            
             cell.categoryLabel.hidden = true
             cell.sortControl.hidden = true
             cell.radiusSlider.hidden = false
             cell.onSwitch.hidden = true
             cell.sliderLabel.hidden = false
-        case "Sort By":
+            cell.delegate = self
+            
+            return cell
+            
+        case 2:
+            // Sort area
+            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+           
             cell.categoryLabel.hidden = true
             cell.sortControl.hidden = false
             cell.radiusSlider.hidden = true
             cell.onSwitch.hidden = true
             cell.sliderLabel.hidden = true
-        default:
-            cell.categoryLabel.hidden = true
-            cell.sortControl.hidden = true
-            cell.radiusSlider.hidden = true
-            cell.onSwitch.hidden = true
-            cell.sliderLabel.hidden = true
+            cell.delegate = self
+            
+            return cell
+            
+        case 3:
+            // Category area
+            
+            
+            if indexPath.row != categories.count {
+                let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+                
+                cell.categoryLabel.text = categories[indexPath.row]["name"]
+                cell.delegate = self
+                
+                cell.onSwitch.on = switchStates[indexPath.row] ?? false
+                
+                cell.onSwitch.hidden = false
+                cell.sortControl.hidden = true
+                cell.radiusSlider.hidden = true
+                cell.sliderLabel.hidden = true
+                cell.delegate = self
+                
+                cell.onSwitch.on = switchStates[indexPath.row] ?? false
+                
+                setCategoryCellVisible(indexPath.row, cell: cell)
+                
+                return cell
 
+            } else {
+                
+                println("in else")
+                let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
+                
+                let clickToSeeAll = UITapGestureRecognizer(target: self, action: "clickToSeeAll:")
+                cell.addGestureRecognizer(clickToSeeAll)
+                
+                return cell
+                
+            }
+            
+        case 4:
+            // Reset row
+            
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
+            cell.seeAllLabel.text = "Reset filters"
+            cell.seeAllLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+            let clickToReset = UITapGestureRecognizer(target: self, action: "clickToReset:")
+            cell.addGestureRecognizer(clickToReset)
+            
+            return cell
+            
+        default:
+            let cell = UITableViewCell()
+            return cell
         }
-        cell.delegate = self
-        println(indexPath.section+indexPath.row)
-        cell.onSwitch.on = switchStates[indexPath.section+indexPath.row] ?? false
+
+            //println(indexPath.section+indexPath.row)
         
-        return cell
     }
     
     func switchCell(switchCell: SwitchCell, didValueChange val: Bool) {
@@ -152,7 +223,7 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         if indexPath.row == 0 {
             deals = val
         } else {
-            switchStates[indexPath.section+indexPath.row] = val
+            switchStates[indexPath.row] = val
         }
         
     }
@@ -166,32 +237,85 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     }
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderViewIdentifier) as! UITableViewHeaderFooterView
-        if data[section].0 == "Deal" {
-            header.hidden = true
-        } else {
-            header.textLabel.text = data[section].0
+        
+        switch section {
+        case 0:
+            header.textLabel.text = "Deal"
+            break
+        case 1:
+            header.textLabel.text = "Distance"
+            break
+        case 2:
+            header.textLabel.text = "Sort By"
+            break
+        case 3:
+            header.textLabel.text = "Category"
+            break
+        default:
+            return nil
         }
-        
+
         return header
-    }
-    
-    func tableView(tabelView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        
-        println("accessory button tap \(indexPath.row)")
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        println("row selected \(indexPath.section)")
-        
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data[section].1.count
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
+        switch indexPath.section {
+        case 3:
+            if isCategoryCollapsed {
+                if indexPath.row > 2 && indexPath.row != categories.count {
+                    return 0
+                }
+            }
+            break
+        default:
+            break
+        }
+        
+        return 50.0
+    }
+
+    
+    func setCategoryCellVisible(row: Int, cell: SwitchCell) {
+        
+        println("in setCategoryCellVisible")
+        if isCategoryCollapsed && row > 2 && row != categories.count {
+            println("in setCategoryCellVisible \(row)")
+            cell.categoryLabel.hidden = true
+            cell.onSwitch.hidden = true
+            return
+        }
+        
+        cell.categoryLabel.hidden = false
+        cell.onSwitch.hidden = false
+    }
+    
+    func clickToSeeAll(sender:UITapGestureRecognizer) {
+        
+        let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: categories.count, inSection: 3)) as! SeeAllCell
+        
+        if cell.seeAllLabel.text == "See All" {
+            cell.seeAllLabel.text = "Collapse"
+            isCategoryCollapsed = false
+        } else {
+            cell.seeAllLabel.text = "See All"
+            isCategoryCollapsed = true
+        }
+        
+        tableView.reloadData()
+    }
+
+    func clickToReset(sender:UITapGestureRecognizer) {
+        
+      //  filters["deal"] = false
+        //filters["radius"] = radii[0]
+        //filters["sort"] = 0
+        switchStates.removeAll(keepCapacity: false)
+        
+        tableView.reloadData()
     }
     
     /*
@@ -207,9 +331,11 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     func yelpSortBy() -> [String] {
         return ["Best Match", "Distance", "Best Rated"]
     }
+    
     func yelpDistance() -> [String] {
         return ["Default","0.5", "1.0", "10.0", "20.0"]
     }
+    
     func yelpCategories() -> [[String:String]] {
         return [["name" : "Afghan", "code": "afghani"],
         ["name" : "African", "code": "african"],

@@ -69,7 +69,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         cell.business = businesses[indexPath.row]
-        if indexPath.row == (searchLimit-1) && searchLimit < 20 {
+        if indexPath.row == (searchLimit-1) && searchLimit < 19 {
             
             println("reloading more data")
             reloadData()
@@ -111,7 +111,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
                 self.businesses = businesses
                 self.tableView.reloadData()
             })
-            
+            self.loadingIndicator.stopAnimating()
             self.isLoading = false
         }
     }
