@@ -12,20 +12,26 @@ import UIKit
     optional func filterViewController(filterviewcontroller:FilterViewController, didUpdateValue filter: [String:AnyObject])
 }
 
-class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,SwitchCellDelegate {
+class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDelegate,SwitchCellDelegate,CollapseViewCellDelegate {
 
         
     @IBOutlet weak var tableView: UITableView!
-    var data:[(String,[AnyObject])]!
-    var arrayForBool : NSMutableArray = NSMutableArray()
+
     var categories: [[String:String]]!
-    var distances: [String]!
+    var distances: [Float?]!
     var sortBy: [String]!
+    
     var switchStates = [Int:Bool]()
+    var filters = [String : AnyObject]()
+    
     var radius: String! = "0"
     var sort: String! = "0"
     var deals: Bool! = false
+    
     var isCategoryCollapsed = true
+    var isDistanceCollapsed = true
+    var isSortByCollapsed = true
+
 
     weak var delegate:FilterViewControllerDelegate?
     
@@ -40,17 +46,14 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         distances = yelpDistance()
         sortBy = yelpSortBy()
 
-        data = [("Deal", ["Offers a deal"]),
-            ("Distance", ["Default"]),
-            ("Sort By", ["Best Match"]),
-            ("Category", yelpCategories())]
+        filters["deals"] = false
+        filters["radius"] = distances[0]
+        filters["sort"] = 0
         
         tableView.dataSource = self
         tableView.delegate = self
         tableView.registerClass(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
         self.tableView.tableFooterView = UIView()
-
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,7 +68,6 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     @IBAction func onSearchButton(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
         
-        var filters = [String : AnyObject]()
         var selectedCategories = [String]()
         
         for (row, isSelected) in switchStates {
@@ -77,14 +79,6 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         if selectedCategories.count > 0 {
             filters["categories"] = selectedCategories
         }
-        
-        println("radius \(radius)")
-        println(" sort \(sort)")
-        println(" deals \(deals)")
-        
-        filters["radius"] = radius
-        filters["sort"] = sort
-        filters["deals"] = deals
         
         delegate?.filterViewController?(self, didUpdateValue: filters)
 
@@ -100,13 +94,11 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         case 0:
             return 1
         case 1:
-            return 1
+            return distances.count
         case 2:
-            return 1
+            return 3
         case 3:
             return categories.count + 1
-        case 4:
-            return 1
         default:
             break
         }
@@ -116,8 +108,7 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-       // let sectionSelected = data[indexPath.section].1
-        println(indexPath.row)
+       // println(indexPath.row)
         switch indexPath.section {
         case 0:
             // Deal area
@@ -125,56 +116,62 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
           
             cell.categoryLabel.text = "Offering a deal"
             cell.onSwitch.hidden = false
-            cell.sortControl.hidden = true
-            cell.radiusSlider.hidden = true
-            cell.sliderLabel.hidden = true
+            
+            cell.onSwitch.on = filters["deals"] as? Bool ?? false
+
             cell.delegate = self
             
             return cell
             
         case 1:
-            // Radius area
             
-            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-            
-            cell.categoryLabel.hidden = true
-            cell.sortControl.hidden = true
-            cell.radiusSlider.hidden = false
-            cell.onSwitch.hidden = true
-            cell.sliderLabel.hidden = false
+            let cell = tableView.dequeueReusableCellWithIdentifier("CollapseViewCell", forIndexPath: indexPath) as! CollapseViewCell
             cell.delegate = self
+
+            if indexPath.row == 0{
+                cell.optionsLabel.text = "Auto"
+            } else if indexPath.row == 1 {
+                cell.optionsLabel.text = String(format: "%g", distances[indexPath.row]!) + " mile"
+            } else {
+                cell.optionsLabel.text = String(format: "%g", distances[indexPath.row]!) + " miles"
+            }
             
+            setDistanceIcon(indexPath.row, iconView: cell.arrowImageView)
+            setDistanceCellVisible(indexPath.row, cell: cell)
+
             return cell
             
         case 2:
-            // Sort area
-            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-           
-            cell.categoryLabel.hidden = true
-            cell.sortControl.hidden = false
-            cell.radiusSlider.hidden = true
-            cell.onSwitch.hidden = true
-            cell.sliderLabel.hidden = true
-            cell.delegate = self
             
+            let cell = tableView.dequeueReusableCellWithIdentifier("CollapseViewCell", forIndexPath: indexPath) as! CollapseViewCell
+            cell.delegate = self
+
+            switch indexPath.row {
+            case 0:
+                cell.optionsLabel.text = "Best Match"
+                break
+            case 1:
+                cell.optionsLabel.text = "Distance"
+                break
+            case 2:
+                cell.optionsLabel.text = "Best Rated"
+                break
+            default:
+                break
+            }
+            
+            setSortByIcon(indexPath.row, iconView: cell.arrowImageView)
+            setSortByCellVisible(indexPath.row, cell: cell)
+            
+
             return cell
             
         case 3:
-            // Category area
-            
             
             if indexPath.row != categories.count {
                 let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
                 
                 cell.categoryLabel.text = categories[indexPath.row]["name"]
-                cell.delegate = self
-                
-                cell.onSwitch.on = switchStates[indexPath.row] ?? false
-                
-                cell.onSwitch.hidden = false
-                cell.sortControl.hidden = true
-                cell.radiusSlider.hidden = true
-                cell.sliderLabel.hidden = true
                 cell.delegate = self
                 
                 cell.onSwitch.on = switchStates[indexPath.row] ?? false
@@ -185,7 +182,7 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
 
             } else {
                 
-                println("in else")
+              //  println("in else")
                 let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
                 
                 let clickToSeeAll = UITapGestureRecognizer(target: self, action: "clickToSeeAll:")
@@ -195,23 +192,10 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
                 
             }
             
-        case 4:
-            // Reset row
-            
-            let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
-            cell.seeAllLabel.text = "Reset filters"
-            cell.seeAllLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-            let clickToReset = UITapGestureRecognizer(target: self, action: "clickToReset:")
-            cell.addGestureRecognizer(clickToReset)
-            
-            return cell
-            
-        default:
+         default:
             let cell = UITableViewCell()
             return cell
         }
-
-            //println(indexPath.section+indexPath.row)
         
     }
     
@@ -220,27 +204,20 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         let indexPath = tableView.indexPathForCell(switchCell)!
         
         // first row is for deals
-        if indexPath.row == 0 {
-            deals = val
+        if indexPath.section == 0 {
+            self.filters["deals"] = val
         } else {
             switchStates[indexPath.row] = val
         }
         
     }
-    
-    func switchCellSlider(sliderLabel: UILabel, didValueChange val: Int) {
-        radius = "\(val)"
-    }
-    
-    func switchCellSegment(sortSegment: UISegmentedControl, didValueChange val: Int) {
-            sort = "\(val)"
-    }
+
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderViewIdentifier) as! UITableViewHeaderFooterView
         
         switch section {
         case 0:
-            header.textLabel.text = "Deal"
+            header.textLabel.text = "Deals"
             break
         case 1:
             header.textLabel.text = "Distance"
@@ -261,9 +238,27 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         switch indexPath.section {
+        
+        case 1:
+            if isDistanceCollapsed {
+                let radiusValue = filters["radius"] as! Float?
+                if radiusValue != distances[indexPath.row] {
+                        return 0
+                }
+            }
+            break
+        case 2:
+            if isSortByCollapsed {
+                let sortValue = getSortByValue()
+                if sortValue != indexPath.row {
+                    return 0
+                }
+            }
+            break
         case 3:
             if isCategoryCollapsed {
                 if indexPath.row > 2 && indexPath.row != categories.count {
@@ -281,9 +276,9 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
     
     func setCategoryCellVisible(row: Int, cell: SwitchCell) {
         
-        println("in setCategoryCellVisible")
+       // println("in setCategoryCellVisible")
         if isCategoryCollapsed && row > 2 && row != categories.count {
-            println("in setCategoryCellVisible \(row)")
+           // println("in setCategoryCellVisible \(row)")
             cell.categoryLabel.hidden = true
             cell.onSwitch.hidden = true
             return
@@ -307,18 +302,123 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         
         tableView.reloadData()
     }
-
-    func clickToReset(sender:UITapGestureRecognizer) {
+    
+    func setDistanceIcon(row: Int, iconView: UIImageView) {
         
-      //  filters["deal"] = false
-        //filters["radius"] = radii[0]
-        //filters["sort"] = 0
-        switchStates.removeAll(keepCapacity: false)
+        let radiusValue = filters["radius"] as! Float?
         
-        tableView.reloadData()
+        if radiusValue == distances[row] {
+            if isDistanceCollapsed {
+                iconView.image = UIImage(named: "Arrow")
+            } else {
+                iconView.image = UIImage(named: "Tick")
+            }
+            return
+        }
+        
+        iconView.image = UIImage(named: "Circle")
     }
     
-    /*
+    func setDistanceCellVisible(row: Int, cell: CollapseViewCell) {
+        
+        let radiusValue = filters["radius"] as! Float?
+        if isDistanceCollapsed && distances[row] != radiusValue {
+            cell.optionsLabel.hidden = true
+            cell.arrowImageView.hidden = true
+            return
+        }
+        
+        cell.optionsLabel.hidden = false
+        cell.arrowImageView.hidden = false
+    }
+
+    func setSortByIcon(row: Int, iconView: UIImageView) {
+        
+        let sortValue = getSortByValue()
+        
+        if sortValue == row {
+            if isSortByCollapsed {
+                iconView.image = UIImage(named: "Arrow")
+            } else {
+                iconView.image = UIImage(named: "Tick")
+            }
+            return
+        }
+        
+        iconView.image = UIImage(named: "Circle")
+    }
+    
+    func setSortByCellVisible(row: Int, cell: CollapseViewCell) {
+        
+        let sortValue = getSortByValue()
+        
+        if isSortByCollapsed && row != sortValue {
+            cell.optionsLabel.hidden = true
+            cell.arrowImageView.hidden = true
+            return
+        }
+        
+        cell.optionsLabel.hidden = false
+        cell.arrowImageView.hidden = false
+    }
+    
+    func getSortByValue() -> Int {
+        
+        let sortValue = filters["sort"] as? Int
+        
+        if sortValue != nil {
+            return sortValue!
+        } else {
+            return 0
+        }
+    }
+
+
+    func selectCell(collaspeViewCell: CollapseViewCell, didSelect arrowImage: UIImage) {
+        
+        let indexPath = tableView.indexPathForCell(collaspeViewCell)
+        
+        println(indexPath)
+        println("collapseViewCell ")
+        
+        if indexPath != nil {
+            if indexPath!.section == 1 {
+            
+                switch arrowImage {
+                case UIImage(named: "Arrow")!:
+                    isDistanceCollapsed = false
+                    break
+                case UIImage(named: "Tick")!:
+                    isDistanceCollapsed = true
+                    break
+                case UIImage(named: "Circle")!:
+                    filters["radius"] = distances[indexPath!.row]
+                    isDistanceCollapsed = true
+                    break
+                default:
+                    break
+                }
+            } else if indexPath!.section == 2 {
+            
+                switch arrowImage {
+                case UIImage(named: "Arrow")!:
+                    isSortByCollapsed = false
+                    break
+                case UIImage(named: "Tick")!:
+                    isSortByCollapsed = true
+                    break
+                case UIImage(named: "Circle")!:
+                    filters["sort"] =  NSNumber(unsignedInteger: indexPath!.row)
+                    isSortByCollapsed = true
+                    break
+                default:
+                    break
+                }
+            }
+        tableView.reloadData()
+      }
+
+   }     /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -332,8 +432,8 @@ class FilterViewController: UIViewController,UITableViewDataSource,UITableViewDe
         return ["Best Match", "Distance", "Best Rated"]
     }
     
-    func yelpDistance() -> [String] {
-        return ["Default","0.5", "1.0", "10.0", "20.0"]
+    func yelpDistance() -> [Float?] {
+        return [0.5,1,10,20]
     }
     
     func yelpCategories() -> [[String:String]] {

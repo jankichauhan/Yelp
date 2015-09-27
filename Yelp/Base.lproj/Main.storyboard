@@ -156,7 +156,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Zuz-oR-9aW">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <rect key="frame" x="0.0" y="5" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="52" id="cJW-6z-62c" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
@@ -165,64 +165,59 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cJW-6z-62c" id="8w4-Qo-V9N">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="mi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-in-E8d">
-                                                    <rect key="frame" x="13" y="20" width="140" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hWt-in-E8d">
+                                                    <rect key="frame" x="13" y="16" width="140" height="21"/>
                                                     <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="15"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7fs-ue-Rtp">
-                                                    <rect key="frame" x="256" y="15" width="51" height="31"/>
+                                                    <rect key="frame" x="256" y="11" width="51" height="31"/>
                                                     <color key="onTintColor" red="0.76862745099999996" green="0.070588235289999995" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 </switch>
-                                                <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="FU1-F5-31b">
-                                                    <rect key="frame" x="16" y="16" width="234" height="31"/>
-                                                    <color key="minimumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <color key="thumbTintColor" red="0.76862745098039209" green="0.070588235294117646" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <action selector="sliderValueChanged:" destination="cJW-6z-62c" eventType="valueChanged" id="GPt-hp-NjT"/>
-                                                    </connections>
-                                                </slider>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="0EH-qa-EYg">
-                                                    <rect key="frame" x="8" y="14" width="304" height="29"/>
-                                                    <segments>
-                                                        <segment title="Best Match"/>
-                                                        <segment title="Distance"/>
-                                                        <segment title="Best Rated"/>
-                                                    </segments>
-                                                    <color key="tintColor" red="0.76862745099999996" green="0.070588235289999995" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <action selector="sortSegmentValueChanged:" destination="cJW-6z-62c" eventType="valueChanged" id="OyN-A6-LhV"/>
-                                                    </connections>
-                                                </segmentedControl>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="mi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="83G-Eh-jdE">
-                                                    <rect key="frame" x="262" y="20" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.76862745099999996" green="0.070588235289999995" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="centerY" secondItem="FU1-F5-31b" secondAttribute="centerY" id="7Mv-j9-97y"/>
-                                                <constraint firstAttribute="trailing" secondItem="83G-Eh-jdE" secondAttribute="trailing" constant="8" id="92o-Tg-PbV"/>
-                                                <constraint firstAttribute="bottom" secondItem="0EH-qa-EYg" secondAttribute="bottom" constant="9" id="Bck-Ct-H6b"/>
                                                 <constraint firstItem="hWt-in-E8d" firstAttribute="leading" secondItem="8w4-Qo-V9N" secondAttribute="leading" constant="12" id="FSa-TQ-RIb"/>
-                                                <constraint firstItem="83G-Eh-jdE" firstAttribute="leading" secondItem="FU1-F5-31b" secondAttribute="trailing" constant="15" id="IAo-8L-0W8"/>
                                                 <constraint firstAttribute="centerY" secondItem="7fs-ue-Rtp" secondAttribute="centerY" id="eSI-LA-qg9"/>
-                                                <constraint firstItem="FU1-F5-31b" firstAttribute="leading" secondItem="8w4-Qo-V9N" secondAttribute="leading" constant="18" id="nrY-ZF-ETu"/>
                                                 <constraint firstAttribute="centerY" secondItem="hWt-in-E8d" secondAttribute="centerY" id="s08-y3-zdp"/>
-                                                <constraint firstAttribute="centerY" secondItem="83G-Eh-jdE" secondAttribute="centerY" id="sg1-HC-Zmw"/>
-                                                <constraint firstItem="FU1-F5-31b" firstAttribute="leading" secondItem="8w4-Qo-V9N" secondAttribute="leading" constant="18" id="vHj-eG-bDK"/>
                                                 <constraint firstAttribute="trailing" secondItem="7fs-ue-Rtp" secondAttribute="trailing" constant="15" id="wIi-kS-nOs"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="categoryLabel" destination="hWt-in-E8d" id="tFg-d5-6zc"/>
                                             <outlet property="onSwitch" destination="7fs-ue-Rtp" id="Qtv-5z-uWW"/>
-                                            <outlet property="radiusSlider" destination="FU1-F5-31b" id="llS-MG-PPb"/>
-                                            <outlet property="sliderLabel" destination="83G-Eh-jdE" id="q3p-iY-G8i"/>
-                                            <outlet property="sortControl" destination="0EH-qa-EYg" id="heJ-79-zKF"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CollapseViewCell" id="D8S-rY-KyD" customClass="CollapseViewCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D8S-rY-KyD" id="kXI-Sf-eqR">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Best Match" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JuB-U7-Obo">
+                                                    <rect key="frame" x="15" y="17" width="85" height="19"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Arrow" translatesAutoresizingMaskIntoConstraints="NO" id="LO7-na-13j">
+                                                    <rect key="frame" x="270" y="12" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="25" id="Zxx-ig-aO4"/>
+                                                        <constraint firstAttribute="height" constant="25" id="nGP-da-GxB"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerY" secondItem="LO7-na-13j" secondAttribute="centerY" id="3Xn-nE-BnS"/>
+                                                <constraint firstItem="JuB-U7-Obo" firstAttribute="leading" secondItem="kXI-Sf-eqR" secondAttribute="leading" constant="12" id="Bz6-O0-ge4"/>
+                                                <constraint firstAttribute="centerY" secondItem="JuB-U7-Obo" secondAttribute="centerY" id="Rr6-mR-Yws"/>
+                                                <constraint firstAttribute="trailing" secondItem="LO7-na-13j" secondAttribute="trailing" constant="12" id="n2i-On-gE2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="arrowImageView" destination="LO7-na-13j" id="Pal-M6-23A"/>
+                                            <outlet property="optionsLabel" destination="JuB-U7-Obo" id="x6x-fb-FDZ"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SeeAllCell" id="zWS-nM-tX6" customClass="SeeAllCell" customModule="Yelp" customModuleProvider="target">
@@ -353,6 +348,9 @@
             <point key="canvasLocation" x="1704" y="420"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Arrow" width="50" height="50"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -11,44 +11,27 @@ import UIKit
 //this protcol is optional, hence the "@objc"
 @objc protocol SwitchCellDelegate {
     optional func switchCell(switchCell:SwitchCell, didValueChange val:Bool)  //function name = what view is firing the function
-    optional func switchCellSlider(sliderLabel:UILabel, didValueChange val:Int)
-    optional func switchCellSegment(sortSegment:UISegmentedControl, didValueChange val:Int)
 }
 
 class SwitchCell: UITableViewCell {
 
-    @IBOutlet weak var sortControl: UISegmentedControl!
-    @IBOutlet weak var radiusSlider: UISlider!
     @IBOutlet weak var categoryLabel: UILabel!
-    
-    @IBOutlet weak var sliderLabel: UILabel!
-    @IBOutlet weak var expandButton: UIButton!
-    weak var delegate:SwitchCellDelegate? // '?' because the delegate is optional
-    
     @IBOutlet weak var onSwitch: UISwitch!
+    
+    weak var delegate:SwitchCellDelegate? // '?' because the delegate is optional
+
     override func awakeFromNib() {
         super.awakeFromNib()
 
         onSwitch.addTarget(self, action: "switchValueChanged", forControlEvents: UIControlEvents.ValueChanged)
     }
 
-    @IBAction func sliderValueChanged(sender: UISlider) {
-        
-        var currentValue = Int(sender.value)
-        
-        sliderLabel.text = "\(currentValue) mi"
-        delegate?.switchCellSlider?(sliderLabel, didValueChange: currentValue)
-    }
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-    
-    @IBAction func sortSegmentValueChanged(sender: AnyObject) {
-        
-        delegate?.switchCellSegment?(sortControl, didValueChange: sortControl.selectedSegmentIndex)
-    }
+
     func switchValueChanged(){
         
         delegate?.switchCell?(self, didValueChange: onSwitch.on)

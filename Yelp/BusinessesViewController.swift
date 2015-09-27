@@ -126,17 +126,17 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     func filterViewController(filterviewcontroller: FilterViewController, didUpdateValue filter: [String : AnyObject]) {
         
         var categories = filter["categories"] as? [String]
-        var radius = filter["radius"] as? String
+        var radius = filter["radius"] as? Float?
         var deals = filter["deals"] as? Bool
-        let sort = filter["sort"] as! String
+        let sort = filter["sort"] as! Int
         var sortBy:YelpSortMode!
         
         switch sort{
-            case "0":
+            case 0:
                 sortBy = YelpSortMode.BestMatched
-            case "1":
+            case 1:
                 sortBy = YelpSortMode.Distance
-            case "2":
+            case 2:
                 sortBy = YelpSortMode.HighestRated
         default:
             sortBy = YelpSortMode.BestMatched
