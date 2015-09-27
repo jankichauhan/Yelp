@@ -15,6 +15,10 @@ class Business: NSObject {
     let distance: String?
     let ratingImageURL: NSURL?
     let reviewCount: NSNumber?
+    let contactNumber: String?
+    let latitude: Double?
+    let longitude: Double?
+
     
     init(dictionary: NSDictionary) {
         name = dictionary["name"] as? String
@@ -28,6 +32,8 @@ class Business: NSObject {
         
         let location = dictionary["location"] as? NSDictionary
         var address = ""
+        var latitude = 0.0
+        var longitude = 0.0
         if location != nil {
             let addressArray = location!["address"] as? NSArray
             var street: String? = ""
@@ -42,8 +48,14 @@ class Business: NSObject {
                 }
                 address += neighborhoods![0] as! String
             }
+            
+            latitude = (location!.valueForKeyPath("coordinate.latitude") as? Double)!
+            longitude = (location!.valueForKeyPath("coordinate.longitude") as? Double)!
         }
+        
         self.address = address
+        self.longitude = longitude
+        self.latitude = latitude
         
         let categoriesArray = dictionary["categories"] as? [[String]]
         if categoriesArray != nil {
@@ -73,6 +85,21 @@ class Business: NSObject {
             ratingImageURL = nil
         }
         
+        let phone = dictionary["phone"] as? String
+        var displayPhone = ""
+        if let phone = phone {
+            if count(phone) == 10 {
+                displayPhone = "(" + phone[0...2] + ") "
+                displayPhone += phone[3...5] + "-"
+                displayPhone += phone[6...9]
+            } else {
+                displayPhone = phone
+            }
+        } else {
+            displayPhone = "N/A"
+        }
+        self.contactNumber = displayPhone
+        
         reviewCount = dictionary["review_count"] as? NSNumber
     }
     
@@ -91,5 +118,16 @@ class Business: NSObject {
     
     class func searchWithTerm(term: String, limit: Int, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: ([Business]!, NSError!) -> Void) -> Void {
         YelpClient.sharedInstance.searchWithTerm(term, limit: limit, sort: sort, categories: categories, deals: deals, completion: completion)
+    }
+}
+
+extension String {
+    subscript (r: Range<Int>) -> String {
+        get {
+            let startIndex = advance(self.startIndex, r.startIndex)
+            let endIndex = advance(startIndex, r.endIndex - r.startIndex)
+            
+            return self[Range(start: startIndex, end: endIndex)]
+        }
     }
 }

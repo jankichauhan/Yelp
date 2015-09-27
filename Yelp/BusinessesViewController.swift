@@ -117,10 +117,20 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     }
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let navigationController = segue.destinationViewController as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FilterViewController
         
-        filtersViewController.delegate = self
+        let navigationController = segue.destinationViewController as! UINavigationController
+        
+        if navigationController.topViewController is FilterViewController {
+            let filtersViewController = navigationController.topViewController as! FilterViewController
+            filtersViewController.delegate = self
+            
+        } else if navigationController.topViewController is DetailViewController {
+            let detailViewController = navigationController.topViewController as! DetailViewController
+            var indexPath: AnyObject!
+            indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+            detailViewController.business = businesses[indexPath!.row]
+        }
+
     }
 
     func filterViewController(filterviewcontroller: FilterViewController, didUpdateValue filter: [String : AnyObject]) {

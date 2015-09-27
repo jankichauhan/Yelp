@@ -110,6 +110,7 @@
                                             <outlet property="ratingsCountImageView" destination="mUo-Ho-bsq" id="mPs-l3-BF4"/>
                                             <outlet property="reviewsCountLabel" destination="ABF-mP-olA" id="D1d-WL-aUx"/>
                                             <outlet property="thumbnailImageView" destination="7u6-aw-pme" id="8gx-M7-yGf"/>
+                                            <segue destination="1hP-aP-6dA" kind="modal" id="K6X-Rr-4a0"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -269,29 +270,126 @@
             </objects>
             <point key="canvasLocation" x="2088" y="-191"/>
         </scene>
-        <!--Map View-->
-        <scene sceneID="Pkk-BE-ssg">
+        <!--Yelp-->
+        <scene sceneID="dWD-QG-MyG">
             <objects>
-                <viewController id="yME-g3-auP" customClass="MapViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="qV4-6Y-8BV" customClass="DetailViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="zLO-jc-sDN"/>
-                        <viewControllerLayoutGuide type="bottom" id="kRQ-0L-soi"/>
+                        <viewControllerLayoutGuide type="top" id="8b0-54-eaZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="D9W-44-jG2"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Cnq-De-FBw">
+                    <view key="view" contentMode="scaleToFill" id="iq7-GI-BeV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="RCg-GG-zht">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                            </mapView>
+                            <imageView userInteractionEnabled="NO" alpha="0.10000000000000002" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h7F-pS-Sdf">
+                                <rect key="frame" x="0.0" y="64" width="320" height="141"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Grand Pu Bah" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jge-kg-L1W">
+                                <rect key="frame" x="16" y="72" width="231" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="0.07 mi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2S-u5-cVw">
+                                <rect key="frame" x="262" y="72" width="57" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="$$" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QgL-wu-KUW">
+                                <rect key="frame" x="288" y="97" width="20" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0U5-DI-Ra8">
+                                <rect key="frame" x="16" y="101" width="97" height="21"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="(415) 345-3454" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDb-0k-t6q">
+                                <rect key="frame" x="16" y="153" width="132" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="14"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Thai, Seafood, Salad" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPf-El-anc">
+                                <rect key="frame" x="16" y="130" width="160" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="SxL-po-f3b"/>
+                                    <constraint firstAttribute="width" constant="160" id="nim-1N-QPv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Open" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="09c-lv-0UE">
+                                <rect key="frame" x="272" y="130" width="36" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.33929575989999999" green="0.60784316059999999" blue="0.11214707409999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="1234 Reviews" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P96-kA-rUO">
+                                <rect key="frame" x="129" y="101" width="107" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="88 Division St, Misson Bay" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7tA-8Y-4U8">
+                                <rect key="frame" x="16" y="173" width="205" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ybu-Rh-Fy7" customClass="GMSMapView">
+                                <rect key="frame" x="2" y="207" width="317" height="361"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="jge-kg-L1W" firstAttribute="baseline" secondItem="a2S-u5-cVw" secondAttribute="baseline" id="4GA-yr-P91"/>
+                            <constraint firstItem="0U5-DI-Ra8" firstAttribute="leading" secondItem="iq7-GI-BeV" secondAttribute="leading" constant="16" id="8zW-wB-Hfh"/>
+                            <constraint firstItem="7tA-8Y-4U8" firstAttribute="top" secondItem="ZDb-0k-t6q" secondAttribute="bottom" constant="8" id="CIu-pd-vlR"/>
+                            <constraint firstItem="P96-kA-rUO" firstAttribute="leading" secondItem="0U5-DI-Ra8" secondAttribute="trailing" constant="16" id="Dok-cQ-ZT7"/>
+                            <constraint firstAttribute="trailing" secondItem="a2S-u5-cVw" secondAttribute="trailing" constant="1" id="DvV-aD-iYl"/>
+                            <constraint firstItem="7tA-8Y-4U8" firstAttribute="leading" secondItem="iq7-GI-BeV" secondAttribute="leading" constant="16" id="EXq-mI-BkM"/>
+                            <constraint firstItem="jge-kg-L1W" firstAttribute="leading" secondItem="iq7-GI-BeV" secondAttribute="leading" constant="16" id="Ifi-Fc-Ttl"/>
+                            <constraint firstItem="ZDb-0k-t6q" firstAttribute="top" secondItem="aPf-El-anc" secondAttribute="bottom" constant="3" id="McO-KS-QJk"/>
+                            <constraint firstItem="QgL-wu-KUW" firstAttribute="leading" secondItem="P96-kA-rUO" secondAttribute="trailing" constant="52" id="Nuy-aj-Lc6"/>
+                            <constraint firstAttribute="trailing" secondItem="7tA-8Y-4U8" secondAttribute="trailing" constant="99" id="Orb-DF-Me4"/>
+                            <constraint firstItem="09c-lv-0UE" firstAttribute="leading" secondItem="aPf-El-anc" secondAttribute="trailing" constant="96" id="Slo-6U-QWR"/>
+                            <constraint firstItem="ZDb-0k-t6q" firstAttribute="top" secondItem="aPf-El-anc" secondAttribute="bottom" constant="3" id="Ujy-c7-9oc"/>
+                            <constraint firstItem="ZDb-0k-t6q" firstAttribute="leading" secondItem="iq7-GI-BeV" secondAttribute="leading" constant="16" id="Uz9-Do-zrz"/>
+                            <constraint firstItem="jge-kg-L1W" firstAttribute="top" relation="lessThanOrEqual" secondItem="8b0-54-eaZ" secondAttribute="bottom" constant="8" id="WyS-1F-iIx"/>
+                            <constraint firstItem="aPf-El-anc" firstAttribute="top" secondItem="0U5-DI-Ra8" secondAttribute="bottom" constant="8" id="bRe-7D-L5B"/>
+                            <constraint firstItem="P96-kA-rUO" firstAttribute="bottom" secondItem="0U5-DI-Ra8" secondAttribute="bottom" id="cX2-xj-DsQ"/>
+                            <constraint firstItem="aPf-El-anc" firstAttribute="bottom" secondItem="09c-lv-0UE" secondAttribute="bottom" id="ehA-gk-eEB"/>
+                            <constraint firstItem="aPf-El-anc" firstAttribute="leading" secondItem="iq7-GI-BeV" secondAttribute="leading" constant="16" id="hfN-3O-Anw"/>
+                            <constraint firstItem="P96-kA-rUO" firstAttribute="bottom" secondItem="QgL-wu-KUW" secondAttribute="bottom" id="ueU-KN-Rst"/>
+                            <constraint firstItem="a2S-u5-cVw" firstAttribute="top" relation="lessThanOrEqual" secondItem="8b0-54-eaZ" secondAttribute="bottom" constant="8" id="uuq-oJ-r84"/>
+                            <constraint firstItem="7tA-8Y-4U8" firstAttribute="top" secondItem="ZDb-0k-t6q" secondAttribute="bottom" constant="8" id="zwO-Xe-OHa"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Map View" id="XeE-mA-FtF"/>
+                    <navigationItem key="navigationItem" title="Yelp" id="Xla-mW-Ual">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="ZLE-jx-XOj">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="onCancel:" destination="qV4-6Y-8BV" id="ey7-nJ-jvH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="addressLabel" destination="7tA-8Y-4U8" id="0KI-BA-JSZ"/>
+                        <outlet property="backdropImageView" destination="h7F-pS-Sdf" id="Ef3-Wv-xRP"/>
+                        <outlet property="categoryLabel" destination="aPf-El-anc" id="rGN-ac-TCb"/>
+                        <outlet property="distanceLabel" destination="a2S-u5-cVw" id="00i-yo-xPQ"/>
+                        <outlet property="locationMapView" destination="ybu-Rh-Fy7" id="UH9-Qt-bSO"/>
+                        <outlet property="phoneLabel" destination="ZDb-0k-t6q" id="eCy-XC-5xn"/>
+                        <outlet property="ratingImageView" destination="0U5-DI-Ra8" id="JZz-e3-eCY"/>
+                        <outlet property="reviewLabel" destination="P96-kA-rUO" id="L2O-2R-jI7"/>
+                        <outlet property="titleLabel" destination="jge-kg-L1W" id="k6b-6l-nPp"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7uY-ue-Wh6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="enT-pm-hWG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2088" y="427"/>
+            <point key="canvasLocation" x="2088" y="433"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="H0s-rH-Ch5">
@@ -330,22 +428,22 @@
             <point key="canvasLocation" x="1714" y="-191"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="PvD-CT-Esj">
+        <scene sceneID="3gH-0c-mgo">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="wHK-3i-dTK" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1hP-aP-6dA" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Iw-Lv-i3G">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZXA-6s-QCG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="yME-g3-auP" kind="relationship" relationship="rootViewController" id="SNZ-2h-6dr"/>
+                        <segue destination="qV4-6Y-8BV" kind="relationship" relationship="rootViewController" id="kid-u5-mt5"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zcG-TA-G05" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jZZ-IQ-0cr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1704" y="420"/>
+            <point key="canvasLocation" x="1714" y="438"/>
         </scene>
     </scenes>
     <resources>

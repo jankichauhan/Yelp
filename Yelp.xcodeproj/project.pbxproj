@@ -19,8 +19,10 @@
 		B57214BF1BB611B0003FD4E5 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57214BE1BB611B0003FD4E5 /* MapViewController.swift */; };
 		B57214C11BB736E1003FD4E5 /* SeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57214C01BB736E1003FD4E5 /* SeeAllCell.swift */; };
 		B57214C31BB75B79003FD4E5 /* CollapseViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57214C21BB75B79003FD4E5 /* CollapseViewCell.swift */; };
+		B57214C71BB7A60C003FD4E5 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57214C61BB7A60C003FD4E5 /* DetailViewController.swift */; };
 		B5EA9C471BB3222B00F65CE1 /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA9C461BB3222B00F65CE1 /* SwitchCell.swift */; };
 		B5EA9C491BB322E700F65CE1 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA9C481BB322E700F65CE1 /* FilterViewController.swift */; };
+		BFA265A1BBDFB42D3BD65775 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C56EF0CE844A4EE5819C72AF /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,7 @@
 		B57214BE1BB611B0003FD4E5 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		B57214C01BB736E1003FD4E5 /* SeeAllCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeeAllCell.swift; sourceTree = "<group>"; };
 		B57214C21BB75B79003FD4E5 /* CollapseViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollapseViewCell.swift; sourceTree = "<group>"; };
+		B57214C61BB7A60C003FD4E5 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		B5EA9C461BB3222B00F65CE1 /* SwitchCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
 		B5EA9C481BB322E700F65CE1 /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		BBD540129B10DFE60E8C24E2 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -63,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFA265A1BBDFB42D3BD65775 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +164,7 @@
 				22AAAA9B1AEA1EC300A544AF /* BusinessesViewController.swift */,
 				B5EA9C481BB322E700F65CE1 /* FilterViewController.swift */,
 				B57214BE1BB611B0003FD4E5 /* MapViewController.swift */,
+				B57214C61BB7A60C003FD4E5 /* DetailViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -329,6 +334,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B57214C71BB7A60C003FD4E5 /* DetailViewController.swift in Sources */,
 				B5EA9C491BB322E700F65CE1 /* FilterViewController.swift in Sources */,
 				B54E10F01BB1E67500E85E07 /* BusinessCell.swift in Sources */,
 				22AAAA9C1AEA1EC300A544AF /* BusinessesViewController.swift in Sources */,
