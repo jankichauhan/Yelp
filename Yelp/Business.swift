@@ -18,6 +18,7 @@ class Business: NSObject {
     let contactNumber: String?
     let latitude: Double?
     let longitude: Double?
+    let status: String?
 
     
     init(dictionary: NSDictionary) {
@@ -101,6 +102,13 @@ class Business: NSObject {
         self.contactNumber = displayPhone
         
         reviewCount = dictionary["review_count"] as? NSNumber
+        
+        let isClosed = dictionary["is_closed"] as? Bool
+        if let isClosed =  isClosed {
+            self.status = isClosed ? "Closed" : "Open"
+        } else {
+            self.status = "Open"
+        }
     }
     
     class func businesses(array array: [NSDictionary]) -> [Business] {

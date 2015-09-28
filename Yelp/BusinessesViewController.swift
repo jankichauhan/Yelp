@@ -70,8 +70,6 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         cell.business = businesses[indexPath.row]
         if indexPath.row == (searchLimit-1) && searchLimit < 19 {
-            
-            println("reloading more data")
             reloadData()
         }
         return cell
@@ -97,7 +95,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         
-        println("search change")
+        //println("search change")
     }
     
     func reloadData(){

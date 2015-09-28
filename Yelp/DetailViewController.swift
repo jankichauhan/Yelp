@@ -20,6 +20,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var locationMapView: GMSMapView!
+    @IBOutlet weak var statusLabel: UILabel!
     
     var business: Business!
 
@@ -36,6 +37,7 @@ class DetailViewController: UIViewController {
         addressLabel.text = business.address
         ratingImageView.setImageWithURL(business.ratingImageURL)
         backdropImageView.setImageWithURL(business.imageURL)
+        statusLabel.text = business.status
        
         loadMap()
     }

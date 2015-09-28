@@ -384,6 +384,7 @@
                         <outlet property="phoneLabel" destination="ZDb-0k-t6q" id="eCy-XC-5xn"/>
                         <outlet property="ratingImageView" destination="0U5-DI-Ra8" id="JZz-e3-eCY"/>
                         <outlet property="reviewLabel" destination="P96-kA-rUO" id="L2O-2R-jI7"/>
+                        <outlet property="statusLabel" destination="09c-lv-0UE" id="tv6-Dg-G5U"/>
                         <outlet property="titleLabel" destination="jge-kg-L1W" id="k6b-6l-nPp"/>
                     </connections>
                 </viewController>
