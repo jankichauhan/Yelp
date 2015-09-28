@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
-        <!--Yelp-->
+        <!--Businesses View Controller-->
         <scene sceneID="5L9-Uz-lNK">
             <objects>
                 <viewController id="2xI-yr-O5N" customClass="BusinessesViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
@@ -115,19 +115,38 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uS4-cU-MeM" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="uS4-cU-MeM" secondAttribute="trailing" id="2WF-cE-PCa"/>
+                            <constraint firstItem="uS4-cU-MeM" firstAttribute="top" secondItem="Mz1-xA-9UJ" secondAttribute="bottom" id="BZT-qv-fS9"/>
+                            <constraint firstItem="170-pp-nQZ" firstAttribute="top" secondItem="uS4-cU-MeM" secondAttribute="bottom" id="adl-Sv-m9B"/>
+                            <constraint firstItem="uS4-cU-MeM" firstAttribute="leading" secondItem="XhR-oz-92f" secondAttribute="leading" id="qrg-8Q-KZM"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Yelp" id="Bht-wC-zBJ">
+                    <navigationItem key="navigationItem" id="Bht-wC-zBJ">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" title="Filters" id="Jq3-Sm-PFx">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <segue destination="cMk-kp-Fgs" kind="modal" id="ciC-Zn-aRv"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Map" id="wac-8b-3J2">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="onMapButton:" destination="2xI-yr-O5N" id="6aI-Cd-HvZ"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="mapButoon" destination="wac-8b-3J2" id="0yF-Kp-Chf"/>
+                        <outlet property="mapView" destination="uS4-cU-MeM" id="0xt-GX-mKv"/>
                         <outlet property="searchDisplayController" destination="PP6-60-YcN" id="P1W-ed-woU"/>
                         <outlet property="tableView" destination="sRD-Hl-HfZ" id="LS9-fr-ARC"/>
                     </connections>
@@ -273,7 +292,7 @@
         <!--Yelp-->
         <scene sceneID="dWD-QG-MyG">
             <objects>
-                <viewController id="qV4-6Y-8BV" customClass="DetailViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailNavigationController" id="qV4-6Y-8BV" customClass="DetailViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8b0-54-eaZ"/>
                         <viewControllerLayoutGuide type="bottom" id="D9W-44-jG2"/>

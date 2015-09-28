@@ -6,15 +6,23 @@
 
 
 import UIKit
+import GoogleMaps
 
-class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, FilterViewControllerDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, FilterViewControllerDelegate, UISearchBarDelegate, GMSMapViewDelegate {
 
     var businesses: [Business]!
     var searchBar: UISearchBar!
     var searchLimit:Int!
     
+    @IBOutlet weak var mapButoon: UIBarButtonItem!
+    @IBOutlet weak var mapView: GMSMapView!
     @IBOutlet weak var tableView: UITableView!
+    
     var isLoading = false
+    var totalNumberOfResult = 0
+    var darkColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+    var lightColor = UIColor(red: 220/255, green: 140/255, blue: 140/255, alpha: 1.0)
+
     
     var loadingIndicator: UIActivityIndicatorView!
     override func viewDidLoad() {
@@ -43,19 +51,21 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         
         self.tableView.tableFooterView = tableFooterView;
 
-        Business.searchWithTerm("Thai", limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("", limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
+            self.totalNumberOfResult = businesses.count
            //update table view when new data
             self.tableView.reloadData()
-            
+            self.setTableViewVisible()
+            self.createMarkers()
             for business in businesses {
-                if business.reviewCount != nil {
-                 println(business.reviewCount)
-                }
                 println(business.name!)
                 println(business.address!)
             }
         })
+        
+        mapView.delegate = self
+        mapView.hidden = true
 
     }
 
@@ -88,14 +98,31 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         Business.searchWithTerm(searchBar.text,limit:20, completion: { (businesses: [Business]!, error: NSError!) -> Void in
             self.businesses = businesses
             self.tableView.reloadData()
+            self.createMarkers()
+
         })
+        
+        self.setTableViewVisible()
+        searchBar.resignFirstResponder()
         self.searchBar.endEditing(true)
 
     }
         
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func setTableViewVisible() {
         
-        //println("search change")
+        if totalNumberOfResult > 0 {
+            var buttonText = mapButoon.title
+            if buttonText == "Map" {
+                tableView.hidden = false
+                mapView.hidden = true
+            } else {
+                tableView.hidden = true
+                mapView.hidden = false
+            }
+        } else {
+            tableView.hidden = true
+            mapView.hidden = true
+        }
     }
     
     func reloadData(){
@@ -103,9 +130,10 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         if (!self.isLoading) {
             self.isLoading = true
             searchLimit = searchLimit + 2
-        
+            var searchTerm = searchBar.text ?? ""
+            
             //sleep(10)
-            Business.searchWithTerm("Thai",limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            Business.searchWithTerm(searchTerm,limit: searchLimit, completion: { (businesses: [Business]!, error: NSError!) -> Void in
                 self.businesses = businesses
                 self.tableView.reloadData()
             })
@@ -113,6 +141,25 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
             self.isLoading = false
         }
     }
+    
+    @IBAction func onMapButton(sender: AnyObject) {
+        
+        var buttonText = mapButoon.title
+        if buttonText == "Map" {
+            tableView.hidden = true
+            mapView.hidden = false
+            
+            mapButoon.title = "List"
+        } else {
+            tableView.hidden = false
+            mapView.hidden = true
+            
+            mapButoon.title = "Map"
+        }
+        
+    }
+    
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -129,6 +176,122 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
             detailViewController.business = businesses[indexPath!.row]
         }
 
+    }
+
+    func createMarkers() {
+        
+        // Clear all markers before creating new ones
+        mapView.clear()
+        
+        if businesses.count > 0 {
+            var camera = GMSCameraPosition.cameraWithLatitude(businesses[0].latitude!, longitude: businesses[0].longitude!, zoom: 15)
+            mapView.camera = camera
+            mapView.myLocationEnabled = true
+            
+            // Create maker for each business
+            for i in 0..<businesses!.count {
+                var marker = GMSMarker()
+                marker.position = CLLocationCoordinate2DMake(businesses[i].latitude!, businesses[i].longitude!)
+                marker.title = businesses[i].name
+                marker.map = mapView
+            }
+        }
+    }
+
+    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+        
+        var (business, index) = getBusinessDetailFromMarker(marker)
+        
+        var window = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 90))
+//        window.layer.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
+        window.layer.backgroundColor = UIColor.whiteColor().CGColor
+
+        
+        window.layer.cornerRadius = 5
+       // window.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
+        window.layer.borderColor = UIColor.grayColor().CGColor
+
+        window.layer.borderWidth = 1
+        
+        var titleLabel = UILabel(frame: CGRect(x: 8, y: 8, width: 184, height: 18))
+        titleLabel.text = String(index + 1) + ". " + business!.name!
+        titleLabel.font = UIFont.boldSystemFontOfSize(14)
+        titleLabel.textColor = UIColor.blackColor()
+        titleLabel.numberOfLines = 0
+        titleLabel.sizeToFit()
+        window.addSubview(titleLabel)
+        
+        var distanceLabel = UILabel(frame: CGRect(x: 200, y: 8, width: 42, height: 14))
+        distanceLabel.text = business!.distance
+        distanceLabel.font = UIFont.systemFontOfSize(12)
+        distanceLabel.textColor = UIColor.grayColor()
+        window.addSubview(distanceLabel)
+        
+        var ratings = titleLabel.bounds.origin.y + titleLabel.frame.height + 12
+        var ratingImageView = UIImageView(frame: CGRect(x: 8, y: ratings, width: 83, height: 15))
+        ratingImageView.setImageWithURL(business!.ratingImageURL)
+        window.addSubview(ratingImageView)
+        
+        var reviewsLabel = UILabel(frame: CGRect(x: 99, y: ratings, width: 78, height: 14))
+        reviewsLabel.text = "\(business!.reviewCount!) Reviews"
+        reviewsLabel.font = UIFont.systemFontOfSize(12)
+        reviewsLabel.textColor = UIColor.grayColor()
+        window.addSubview(reviewsLabel)
+        
+        var priceLabel = UILabel(frame: CGRect(x: 228, y: ratings, width: 14, height: 14))
+        priceLabel.text = "$$"
+        priceLabel.font = UIFont.systemFontOfSize(12)
+        priceLabel.textColor = UIColor.grayColor()
+        window.addSubview(priceLabel)
+        
+        var address = ratings + ratingImageView.frame.height + 4
+        var addressLabel = UILabel(frame: CGRect(x: 8, y: address, width: 234, height: 14))
+        addressLabel.text = business!.address!
+        addressLabel.font = UIFont.systemFontOfSize(12)
+        addressLabel.textColor = UIColor.blackColor()
+        addressLabel.numberOfLines = 0
+        addressLabel.sizeToFit()
+        window.addSubview(addressLabel)
+        
+        var categories = address + addressLabel.frame.height + 4
+        var categoriesLabel = UILabel(frame: CGRect(x: 8, y: categories, width: 234, height: 14))
+        categoriesLabel.text = business!.categories!
+        categoriesLabel.font = UIFont.systemFontOfSize(12)
+        categoriesLabel.textColor = UIColor.grayColor()
+        categoriesLabel.numberOfLines = 0
+        categoriesLabel.sizeToFit()
+        window.addSubview(categoriesLabel)
+        
+        var viewHeight = categories + categoriesLabel.frame.height + 8
+        window.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
+        
+        return window
+    }
+    
+    func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+        
+        var detailViewController = self.storyboard?.instantiateViewControllerWithIdentifier("DetailNavigationController") as! DetailViewController
+        var navigationController = UINavigationController(rootViewController: detailViewController)
+        
+        var (business, index) = getBusinessDetailFromMarker(marker)
+        detailViewController.business = business
+        self.presentViewController(navigationController, animated: true, completion: nil)
+    }
+    
+    func getBusinessDetailFromMarker(marker: GMSMarker) -> (Business?, Int) {
+        
+        var latitude = Double(marker.position.latitude)
+        var longitude = Double(marker.position.longitude)
+        
+        for i in 0..<businesses!.count {
+            let businessLatitude = businesses[i].latitude as Double!
+            let businessLongitude = businesses[i].longitude as Double!
+            if businessLatitude == latitude && businessLongitude == longitude {
+                return (businesses[i], i)
+            }
+        }
+        
+        return (nil, -1)
     }
 
     func filterViewController(filterviewcontroller: FilterViewController, didUpdateValue filter: [String : AnyObject]) {
@@ -149,13 +312,18 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
         default:
             sortBy = YelpSortMode.BestMatched
         }
-        var searchTerm = searchBar.text ?? "Resturants"
+        var searchTerm = searchBar.text ?? ""
         println(" search filters \(categories), distance  \(radius), deals \(deals), sort by \(sort)" )
         
        Business.searchWithTerm(searchTerm, limit:20, sort: sortBy, categories: categories, deals: deals) { (businesses:[Business]!, error:NSError!) -> Void in
+        
+            self.totalNumberOfResult = businesses.count
             self.businesses = businesses
             self.tableView.reloadData()
+            self.createMarkers()
         }
+        self.setTableViewVisible()
+
     }
 
 }
