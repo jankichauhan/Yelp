@@ -20,10 +20,7 @@ class BusinessesViewController: UIViewController,UITableViewDataSource,UITableVi
     
     var isLoading = false
     var totalNumberOfResult = 0
-    var darkColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-    var lightColor = UIColor(red: 220/255, green: 140/255, blue: 140/255, alpha: 1.0)
-
-    
+       
     var loadingIndicator: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
